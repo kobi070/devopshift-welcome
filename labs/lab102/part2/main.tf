@@ -1,4 +1,4 @@
-
+# Mock Varibales
 variable "public_ip_not_empty" {
   default = "10.20.30.40"
   description = "Mock Data to check if a certain public_ip is created or not"
@@ -21,6 +21,8 @@ resource "null_resource" "check_public_ip" {
   }
 
 # For production in main lab102 not in the mock
+# Tells me which resource im dependet on in this case aws_instance named vm
+# see in the main code in lab101/2
 #   depends_on = [aws_instance.vm]
 }
 
