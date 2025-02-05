@@ -15,6 +15,7 @@ variable "region" {
   default = "us-east-1"
 }
 
+# Create a var for the instance_id given to us
 variable "instance_id" {
   description = "The ID of the EC2 instance"
   type        = string
