@@ -19,6 +19,13 @@ resource "time_sleep" "wait_for_ip" {
   create_duration = "10s"  # Wait for 10 seconds
 }
 
+resource "null_resource" "run_script" {
+  provisioner "local-exec" {
+    command = "echo 'Hello Jb Class'"
+  }
+}
+
+
 resource "aws_security_group" "sg" {
   ingress {
     from_port   = 22
