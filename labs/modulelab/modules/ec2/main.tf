@@ -36,6 +36,7 @@ variable "tags" {
 }
 
 # Define the variable to accept a list of ports
+# The user will insert an array/list of ports he wishes to open
 variable "open_ports" {
   description = "List of open ports for the security group"
   type        = list(number)
@@ -43,6 +44,7 @@ variable "open_ports" {
 
 # Define a security group resource using the ports
 # Using for_each from terraform
+# to check go to resource named vm and change the security_groups_id to use sg_ex
 resource "aws_security_group" "sg_ex" {
   name        = "example-security-group"
   description = "Security group for dynamic ports"
@@ -53,13 +55,21 @@ resource "aws_security_group" "sg_ex" {
     content {
       from_port   = ingress.value
       to_port     = ingress.value
-      protocol    = "tcp"             # Default protocol
-      cidr_blocks = ["0.0.0.0/0"]    # Default CIDR block
+      protocol    = "tcp"         # Default protocol
+      cidr_blocks = ["0.0.0.0/0"] # Default CIDR block
+    }
+  }
+  dynamic "egress" {
+    for_each = var.open_ports
+
+    content {
+      from_port   = egress.value
+      to_port     = egress.value
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
     }
   }
 }
-
-
 
 # All the resource used for vars in our module
 # Resource: time_sleep, null_resource, aws_security_group, aws_instance
@@ -131,7 +141,7 @@ resource "aws_instance" "vm" {
   ami           = "ami-0c02fb55956c7d316"
   instance_type = "t2.micro"
 
-  vpc_security_group_ids = [aws_security_group.sg_ex.id]
+  vpc_security_group_ids = [aws_security_group.sg.id]
 
   tags = {
     Name = "kobi-vm"
