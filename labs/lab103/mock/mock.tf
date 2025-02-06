@@ -15,6 +15,13 @@ variable "region" {
   default = "us-east-1"
 }
 
+# Create a var for the instance_id given to us
+variable "instance_id" {
+  description = "The ID of the EC2 instance"
+  type        = string
+  default     = "i-09df7e0ed385f871b"
+}
+
 # 2 ways to find an AMI id without having the ID
 data "aws_ami" "terraformami" {
   owners = ["self"]
@@ -28,14 +35,6 @@ data "aws_ami" "terraformami" {
 data "aws_ami" "my-privateami" {
     owners = ["self"]  # Queries only AMIs owned by your account
 
-}
-
-
-# Create a var for the instance_id given to us
-variable "instance_id" {
-  description = "The ID of the EC2 instance"
-  type        = string
-  default     = "i-09df7e0ed385f871b"
 }
 
 # Fetch instance details based on instance ID
