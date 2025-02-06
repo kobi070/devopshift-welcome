@@ -11,6 +11,7 @@ module "ec2" {
     ami = "ami-0c02fb55956c7d316"
     instance_type = "t2.micro"
     tags = {Name: "kobi-vm"}
+    open_ports = [22, 80, 443]
   
 }
 output "ec2_output" {

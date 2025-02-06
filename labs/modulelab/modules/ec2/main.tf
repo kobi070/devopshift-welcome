@@ -1,16 +1,16 @@
 # This is the logic for the module/main.tf file
 # The module main.tf will come to this file and insert the varibales values
 # Example :
-    # region = "us-east-1"
-    # ami = "ami-0c02fb55956c7d316"
-    # instance_type = "t2.micro"
-    # tags = {Name: "kobi-vm"}
+# region = "us-east-1"
+# ami = "ami-0c02fb55956c7d316"
+# instance_type = "t2.micro"
+# tags = {Name: "kobi-vm"}
 
 # Providers for terraform
 terraform {
   required_providers {
     time = {
-      source = "hashicorp/time"
+      source  = "hashicorp/time"
       version = "0.12.1"
     }
   }
@@ -25,6 +25,7 @@ provider "aws" {
 # for example we could have added a varibale for each of the rules we want to adress in our firewall using our security group
 
 variable "region" {
+  default = "us-east-1"
 }
 variable "ami" {
 }
@@ -33,6 +34,31 @@ variable "instance_type" {
 }
 variable "tags" {
 }
+
+# Define the variable to accept a list of ports
+variable "open_ports" {
+  description = "List of open ports for the security group"
+  type        = list(number)
+}
+
+# Define a security group resource using the ports
+# Using for_each from terraform
+resource "aws_security_group" "sg_ex" {
+  name        = "example-security-group"
+  description = "Security group for dynamic ports"
+
+  dynamic "ingress" {
+    for_each = var.open_ports
+
+    content {
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"             # Default protocol
+      cidr_blocks = ["0.0.0.0/0"]    # Default CIDR block
+    }
+  }
+}
+
 
 
 # All the resource used for vars in our module
@@ -63,7 +89,7 @@ variable "tags" {
 # }
 
 resource "time_sleep" "wait_for_ip" {
-  create_duration = "10s"  # Wait for 10 seconds
+  create_duration = "10s" # Wait for 10 seconds
 }
 
 resource "null_resource" "run_script" {
@@ -73,7 +99,7 @@ resource "null_resource" "run_script" {
 }
 
 resource "null_resource" "check_public_ip" {
-    provisioner "local-exec" {
+  provisioner "local-exec" {
     command = <<EOT
       if [ -z "${aws_instance.vm.public_ip}" ]; then
         echo "ERROR: Public IP address was not assigned." >&2
@@ -81,8 +107,8 @@ resource "null_resource" "check_public_ip" {
       fi
     EOT
   }
-  
-  depends_on = [ aws_instance.vm ]
+
+  depends_on = [aws_instance.vm]
 }
 
 resource "aws_security_group" "sg" {
@@ -105,7 +131,7 @@ resource "aws_instance" "vm" {
   ami           = "ami-0c02fb55956c7d316"
   instance_type = "t2.micro"
 
-  vpc_security_group_ids = [aws_security_group.sg.id]
+  vpc_security_group_ids = [aws_security_group.sg_ex.id]
 
   tags = {
     Name = "kobi-vm"
@@ -128,8 +154,8 @@ output "public_ip" {
   value = "The Public ip of the create machine: ${aws_instance.vm.public_ip}"
 }
 output "vm_public_ip" {
-  value       = aws_instance.vm.public_ip
-  depends_on  = [null_resource.check_public_ip]  # Wait for the time_sleep resource to complete
+  value      = aws_instance.vm.public_ip
+  depends_on = [null_resource.check_public_ip] # Wait for the time_sleep resource to complete
   # depends_on = [ time_sleep.wait_for_ip] # Wait for the time_sleep resource to complete
   description = "Public IP address of the VM"
 
