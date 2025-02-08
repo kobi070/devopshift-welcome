@@ -41,14 +41,14 @@ output "security_group_id" {
 }
 
 # Output the EC2 Instance ID (if you added the EC2 instance)
-# output "ubuntu_instance_id" {
-#   description = "The ID of the Ubuntu EC2 instance"
-#   value       = aws_instance.ubuntu_instance.id
-# }
+output "ubuntu_instance_id" {
+  description = "The ID of the Ubuntu EC2 instance"
+  value       = aws_instance.ec2-ubuntu.id
+}
 
-# # Output the public IP of the Ubuntu EC2 instance (if applicable)
-# output "ubuntu_instance_public_ip" {
-#   description = "The public IP of the Ubuntu EC2 instance"
-#   value       = aws_instance.ubuntu_instance.public_ip
-# }
+# Output the public IP of the Ubuntu EC2 instance (if applicable)
+output "ubuntu_instance_public_ip" {
+  description = "The public IP of the Ubuntu EC2 instance"
+  value       = aws_instance.ec2-ubuntu.public_ip
+}
 

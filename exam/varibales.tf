@@ -57,3 +57,14 @@ variable "rt_cidr" {
   default     = "0.0.0.0/0"
   description = "value of the public route table cidr block which allows traffic"
 }
+# Instance ec2 variables
+variable "ubuntu_ami" {
+  type = string
+  default = "ami-0e1bed4f06a3b463d"
+  description = "value of the ubuntu ami"
+}
+variable "instance_type" {
+  type = string
+  default = "t2.micro"
+  description = "value of the instance type"
+}

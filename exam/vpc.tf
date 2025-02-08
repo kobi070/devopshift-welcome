@@ -75,37 +75,6 @@ resource "aws_route_table_association" "private_rt_association" {
   route_table_id = aws_route_table.private_rt.id
 }
 
-# Create a aws security group
-# Open port 22 for ssh ingress=inbound rules and egress=outbound rules
-# Should open port 80
-# NOT USED YET WILL USE IN THE SECOND STEP
-resource "aws_security_group" "sg" {
-  vpc_id      = aws_vpc.custom_vpc[0].id
-  description = "Allow inbound traffic for SSH and HTTP"
-  name        = "${var.name}-sg"
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
 
-# Creation of ec2 ubunto instance
-
-# Output the vpc, public subnet, private subnet, internet gateway, public route table, private route table
