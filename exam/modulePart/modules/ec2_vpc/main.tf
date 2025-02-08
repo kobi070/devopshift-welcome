@@ -18,6 +18,7 @@ resource "aws_subnet" "public_custom_subnet" {
   vpc_id                  = aws_vpc.custom_vpc[0].id # Attach the subnet to the VPC
   cidr_block              = var.subnet_cidr["public"][count.index]
   map_public_ip_on_launch = true
+  availability_zone = var.az-list[count.index]
 
   tags = {
     "Name" = "${var.name}-public-subnet-${count.index}",
@@ -31,6 +32,7 @@ resource "aws_subnet" "private_custom_subnet" {
   vpc_id                  = aws_vpc.custom_vpc[0].id # Attach the subnet to the VPC
   cidr_block              = var.subnet_cidr["private"][count.index]
   map_public_ip_on_launch = false
+  availability_zone = var.az-list[count.index]
 
   tags = {
     "Name" = "${var.name}-private-subnet-${count.index}",

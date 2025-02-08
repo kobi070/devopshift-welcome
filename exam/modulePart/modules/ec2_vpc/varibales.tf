@@ -26,6 +26,11 @@ variable "az" {
   default     = "us-east-1a"
   description = "value of the availability zone"
 }
+variable "az-list" {
+  type = list(string)
+  default = ["us-east-1a", "us-east-1b", "us-east-1c", "us-east-1d", "us-east-1c"]
+  description = "a list of all available availability zones in us-east-1" 
+}
 # Name varibale
 variable "name" {
   default = "kobi"
