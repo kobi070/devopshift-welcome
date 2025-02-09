@@ -8,7 +8,7 @@ variable "create_ec2" {
   default = true
 }
 variable "name" {
-  default = "OmerAsus"
+  default = "kobi"
 }
 
 resource "aws_vpc" "custom_vpc" {
