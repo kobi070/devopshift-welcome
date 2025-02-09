@@ -7,12 +7,10 @@ Parts 1 and 2 Contains a creation of VPC and EC2 instance, while Parts 3 and 4 e
 
 ## Directory Structure
 
-### General
-
 - `mock/`: Contains mock files for testing purposes.
   - `mock.tf`: Mock variables ant Data blocks used for testing.
 
-### Part 1 & 2
+## Part 1 & 2
 
 - `network.tf`: Holds the security group.
 - `varibales.tf`: Holds all the used variables in parts 1 and 2.
@@ -20,7 +18,7 @@ Parts 1 and 2 Contains a creation of VPC and EC2 instance, while Parts 3 and 4 e
 - `vm.tf`: Holds all the configuration for the EC2 instance.
 - `vpc.tf`: Holds all the configuration for the VPC.
 
-### Parts 3 & 4
+## Parts 3 & 4
 
 - `modulePart/main.tf`: contains the module ec2_vpc and module app_alb
   - `modules/ec2_vpc
