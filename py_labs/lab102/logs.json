@@ -1,0 +1,5 @@
+{"time": 1739194087.8939424, "name": "myapp_logger", "levelname": "ERROR", "message": "An error has occured: 'k' is not supported"}
+{"time": 1739194090.770167, "name": "myapp_logger", "levelname": "INFO", "message": "mysql is running"}
+{"time": 1739194093.0541782, "name": "myapp_logger", "levelname": "WARNING", "message": "apache is not running"}
+{"time": 1739194096.946598, "name": "myapp_logger", "levelname": "INFO", "message": "nginx is running"}
+{"time": 1739194099.499558, "name": "myapp_logger", "levelname": "ERROR", "message": "An error has occured: 'djasdjoi' is not supported"}
