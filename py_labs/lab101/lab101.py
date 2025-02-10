@@ -26,3 +26,19 @@ try:
 except KeyError as error:
     print(f"{user_input} is invalid, {error.with_traceback()}")
 
+
+def check_if_server_exists(user_input, list_servers):
+    try:
+            print(user_input in list_servers)
+    except ValueError as error:
+            raise ValueError(f"{user_input} is invalid, {error.with_traceback()}")
+
+def check_exists_and_running(user_input, dic_server):
+    try:
+        print(dic_server[user_input])
+        if dic_server[user_input] is not True:
+            print(f"{user_input} is not running")
+        else:
+            print(f"{user_input} is running")
+    except KeyError as error:
+        raise KeyError(f"{user_input} is invalid, {error.with_traceback()}")
