@@ -26,5 +26,3 @@ try:
 except KeyError as error:
     print(f"{user_input} is invalid, {error.with_traceback()}")
 
-
-val = list_servers.index(user_input) ? print("works") : 
