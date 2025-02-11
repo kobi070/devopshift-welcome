@@ -45,7 +45,5 @@ override.tf.json
 terraform.rckeys/
 
 # Dont include log files
-log.*
+logs.*
 
-# Include log.py file
-!log.py
