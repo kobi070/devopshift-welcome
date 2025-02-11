@@ -1,24 +1,24 @@
-from log import setup_logging, server_dictionary
-from InvalidServerNameError import InvalidServerNameError 
+from fastapi import FastAPI
+from dataclasses import dataclass
+import httpx
+app = FastAPI()
 
-logger = setup_logging()
+@app.get('/')
+def hello_world():
+    "This is our hello world main route app"
+    return {"result": ["hello", "world"]};
 
-def check_service_status(server_name: str) -> bool:
-    try:
-        return server_dictionary[server_name]
-    except KeyError:
-        logger.error(f"An error has occured: {server_name} is not supported")
-    return False
+@dataclass
+class User:
+    name: str;
+    email: str;
 
+@app.get('/users')
+def get_users() -> list[User]:
+    response = httpx.get('https://jsonplaceholder.typicode.com/users');
+    users = response.json();
+    return users;
 
-while True :
-    try:
-        user_input = input("Please enter a valid service name: ")
-        if user_input == "quit" : exit()
-        status = check_service_status(user_input)
-        if (status):
-            logger.info(f"{user_input} is running and status is {status}")
-        else:
-            logger.info(f"{user_input} is not running and status is {status}")
-    except InvalidServerNameError as Error:
-        logger.error(f"An error has occured: invalid service name")
+@app.post('/users')
+def create_user(new_user: User) -> bool:
+    return True
