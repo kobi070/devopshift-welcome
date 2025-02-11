@@ -46,3 +46,6 @@ terraform.rckeys/
 
 # Dont include log files
 log.*
+
+# Include log.py file
+!log.py
