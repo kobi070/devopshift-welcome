@@ -26,7 +26,7 @@ def read_servers() -> dict[str, Server]:
                 except ValidationError:
                     pass
                 else:
-                    servers[json_object["name"]] = new_server
+                    servers[new_server.name] = new_server
     return servers
 
 
