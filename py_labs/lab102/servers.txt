@@ -1,0 +1,6 @@
+{"name":"nginx","online":"true","cpus":2,"ram":4}
+{"name":"docker","online":"true","cpus":4,"ram":8}
+{"name":"verybad","online":"true","cpus":1,"ram":1}
+{"name":"wow","online":"true","cpus":6,"ram":10}
+{"name":"kaki","online":true,"cpus":2,"ram":3}
+{"name":"kobi","online":false,"cpus":2,"ram":2}

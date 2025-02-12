@@ -14,7 +14,7 @@ server_dictionary = {
 }
 
 log_level = os.environ.get("LOG_LEVEL", "DEBUG")
-log_format = os.environ.get("LOG_FORMAT", "TEXT")
+log_format = os.environ.get("LOG_FORMAT", "JSON")
 
 class JSONFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:

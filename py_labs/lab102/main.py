@@ -1,45 +1,32 @@
-import datetime
 from fastapi import FastAPI
-from dataclasses import dataclass
-import httpx
 from tools import check_service_status, add_server
+from models import Server, ServerResponse, add_new_server
+# from models import *
 app = FastAPI()
 
-# @dataclass
-# class User:
-#     name: str
-#     email: str
 
 @app.get('/server')
-def get_server(server_name: str):
+def get_server(server_name: str) -> ServerResponse:
     "GET request to check if the server is running "
     status = check_service_status(server_name)
     if(status):
-        return {"status": f"{server_name} is running and {status}"}
+        return ServerResponse(server_name=server_name, server_status=status)
     else:
-        return {"status": f"{server_name} is not running and {status}"}
+        return ServerResponse(server_name=server_name, server_status=status)
 
 @app.post('/server')
-def post_server(server_name: str, is_running: bool):
+def post_server(server_name: str, is_running: bool, cpus:int, ram: int) -> ServerResponse:
     "POST request to add a new server to the dictionary"
     status = add_server(server_name, is_running)
+    server_status = "running" if is_running else "not running"
     if(status):
-        return {"server":server_name, "status":status}
+        add_new_server(Server(name=server_name, online=is_running, cpus=cpus, ram=ram))
+        return ServerResponse(server_name=server_name, server_status=f"created server named {server_name} and the server is{server_status}")
     else:
-        return {"server":server_name, "status":status, "message":f"failed to insert {server_name}"}
+        return ServerResponse(server_name=server_name, server_status=f"Was no able to create {server_name}")
 
 
 @app.get('/')
 def hello_world():
     "This is our hello world main route app"
     return {"result": ["hello", "world"]};
-
-# @app.get('/users')
-# def get_users() -> list[User]:
-#     response = httpx.get('https://jsonplaceholder.typicode.com/users');
-#     users = response.json();
-#     return users;
-
-# @app.post('/users')
-# def create_user(new_user: User) -> bool:
-#     return True
