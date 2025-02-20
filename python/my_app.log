@@ -1,0 +1,7 @@
+2025-02-10 12:01:58,781:INFO:This is a Info message:kobi
+2025-02-10 12:01:58,781:WARNING:This is a Warning message:kobi
+2025-02-10 12:01:58,781:ERROR:This is a Error message:kobi
+2025-02-10 12:01:58,781:INFO:This is a Info message:another_logger
+2025-02-10 12:01:58,781:WARNING:This is a Warning message:another_logger
+2025-02-10 12:01:58,781:DEBUG:This is a Debug message:another_logger
+2025-02-10 12:01:58,781:ERROR:This is a Error message:another_logger
