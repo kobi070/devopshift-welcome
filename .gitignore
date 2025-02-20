@@ -1,1 +1,7 @@
 **get_helm.sh**
+
+# Ignore certain files and directories that are not used in the branch worksho/perfect-monitoring
+/docker-demo
+/exam
+/py_labs
+/credentials.txt
