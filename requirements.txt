@@ -5,3 +5,5 @@ pydantic==2.10.6
 requests==2.32.3
 boto3==1.36.18
 pyfiglet==1.0.2
+Jinja2==3.1.5
+python-terraform==0.10.1
