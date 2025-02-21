@@ -47,3 +47,9 @@ terraform.rckeys/
 # Dont include log files
 logs.*
 
+# Include py_labs
+!py_labs
+
+# Exclude exam, docker-demo
+exam
+docker-demo
