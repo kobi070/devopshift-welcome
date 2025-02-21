@@ -1,52 +1,18 @@
 # DevOps Shift Welcome
 Welcome to the DevOps Shift project! This repository contains various scripts, configurations, and examples to help you get started with DevOps practices using Python, Terraform, and other tools.
 ## Directory Structure
-devopshift-welcome/
-- .gitignore
-- .vscode/
-    -  launch.json
-- code/
-    - samples/
-    - solutions/
-- credentials.txt
-- docker-demo/
-    - app/
-    -  Dockerfile
-- exam/
-    - .terraform/
-    - .terraform.lock.hcl
-    - mock/
-    - modulePart/
-    - terraform.tfstate
-    -  terraform.tfstate.backup
-- generatessh-agent.sh
 - py_exam/
     - aws/
-    - generated/
+        - aws_validator.py
     - logs.json
     - main.py
     - terraform/
+        - template
+        - generated
     -  utils/
-- py_labs/
-    - lab101/
-    - lab102/
-    - lab103/
-    - lab104/
-    -  lab105/
-- python/
-    - assigment.py
-    - classes-demo.py
-    - cloud.py
-    - dataclasses-demo.py
-    - files-demo.py
-    - fn-demo.py
-    - json-demo.py
-    - jsonformatter.py
-    - lg.py
-    - req-demo.py
-    - request-dm.py
-    - servers.txt
-    -  subproc-demo.py
+        - logger.py
+        - config.py
+
 
 ## Getting Started
 ### Prerequisites
