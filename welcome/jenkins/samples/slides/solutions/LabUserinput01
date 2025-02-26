@@ -142,5 +142,6 @@ echo 'Running automated tests...'
                 sh 'rm -rf $PYENV_HOME'
             }
         }
+        
     }
 }
