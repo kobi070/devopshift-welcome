@@ -41,12 +41,10 @@ pipeline{
         stage('Stage 3 - Run Flask Application'){
             steps{
                 script{
-                    sh'''!#/bin/bash
                     echo "source $PROJECT_HOME/bin/activate"
                     echo "Gets tasks"
                     echo "Starting Flask App on 0.0.0.0:5005"
                     echo "nohup flask run --host=0.0.0.0 --port=5005 > flask_app."
-                    '''
                 }
             }
         }
