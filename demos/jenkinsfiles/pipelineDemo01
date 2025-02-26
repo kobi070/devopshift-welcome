@@ -67,7 +67,7 @@ pipeline {
             }
             steps {
                 script {
-                    error 'Pipeline aborted by the user'
+                    error 'Pipeline aborted by the user ${env.BUILD_USER}'
                 }
             }
         }
@@ -83,10 +83,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline completed successfully'
+            echo 'Pipeline completed successfully ${env.BUILD_USER}'
         }
         aborted {
-            echo 'Pipeline aborted by user'
+            echo 'Pipeline aborted by user ${env.BUILD_USER}'
         }
         always {
             echo 'This will always run'
