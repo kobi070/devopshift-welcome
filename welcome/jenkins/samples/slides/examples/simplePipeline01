@@ -77,17 +77,6 @@ pipeline {
             }
         }
 
-        stage('Continue the Pipeline') {
-            when {
-                expression { env.USER_CHOICE == 'Proceed' }
-            }
-            steps {
-                script {
-                    echo 'Continuing the pipeline...'
-                }
-            }
-        }
-
         stage('Abort the Pipeline') {
             when {
                 expression { env.USER_CHOICE == 'Abort' }
@@ -122,7 +111,21 @@ pipeline {
         }
     }
 
-    post {
+ post {
+        success {
+            script {
+                if (env.USER_CHOICE == 'Proceed') {
+                    echo 'Pipeline completed successfully'
+                }
+            }
+        }
+        aborted {
+            script {
+                if (env.USER_CHOICE == 'Abort') {
+                    echo 'Pipeline aborted by the user'
+                }
+            }
+        }
         always {
             dir("${PROJECT_HOME}") {
                 echo 'Cleaning up workspace...'
