@@ -101,6 +101,18 @@ pipeline {
             }
         }
         
+        stage("Archive Log to Artifactory using script{}") {
+            steps{
+                script{
+                    sh echo "Archiving log file into ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log"
+                    sh ls -l
+                    sh pwd
+                    sh touch ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log
+                    sh echo "flask_app" >> ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log
+                    archiveArtifacts artifacts: "${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log", allowEmptyArchive: true // Archive the log file
+                }
+            }
+        }
 
         stage('Verify Application') {
             steps {
