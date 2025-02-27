@@ -90,17 +90,14 @@ pipeline {
 
         stage("Archive Log"){
             steps{
-                script{
-
-                    sh'''
-                    echo "Archiving log file into ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log"
-                    ls -l
-                    pwd
-                    touch ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log
-                    echo "flask_app" >> ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log
-                    '''
-                    archiveArtifacts artifacts: "${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log", allowEmptyArchive: true // Archive the log file
-                }
+                sh"""
+                echo "Archiving log file into ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log"
+                ls -l
+                pwd
+                touch ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log
+                echo "flask_app" >> ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log
+                """
+                archiveArtifacts artifacts: "${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log", allowEmptyArchive: true // Archive the log file
             }
         }
 
