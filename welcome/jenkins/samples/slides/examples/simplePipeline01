@@ -97,7 +97,7 @@ pipeline {
                 touch ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log
                 echo "flask_app" >> ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log
                 '''
-                archiveArtifacts artifacts: "/${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log", allowEmptyArchive: true // Archive the log file
+                archiveArtifacts artifacts: "${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log", allowEmptyArchive: true // Archive the log file
             }
         }
 
