@@ -65,10 +65,5 @@ pipeline {
                 echo "The deployment was aborted"
             }
         }
-        proceed{
-            script{
-                echo "The deployment was successful"
-            }
-        }
     }
 }
