@@ -1,0 +1,34 @@
+@Library('my-shared-library') _
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    // Call a shared library function
+                    myLibrary.buildApp()
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    // Use another function from the shared library
+                    myLibrary.deployApp(env.BRANCH_NAME)
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                // Call a cleanup function from the shared library
+                myLibrary.cleanup()
+            }
+        }
+    }
+}
