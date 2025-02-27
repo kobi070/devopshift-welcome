@@ -30,19 +30,6 @@ pipeline {
             }
         }
 
-        stage('Ask user to abort')
-        {  // This stage will only run if the previous stage fails{
-            steps{
-                script{
-                    def userChoice = myLibrary.askUserToAboart()
-                    if(userChoice == 'Abort'){
-                        error('User aborted the deployment')
-                        exit(1)
-                    }
-                }
-            }
-        }
-
         stage('Deploy') {
             steps {
                 script {
