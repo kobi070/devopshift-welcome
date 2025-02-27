@@ -7,8 +7,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'MyCredID', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     echo "Deploying with username ${env.USERNAME}"
                     // Use the credentials in your deployment steps
-                    sh 'echo $USERNAME'
-                    sh 'echo $PASSWORD'
+                    sh 'echo my username is : $USERNAME'
+                    sh 'echo my password is : $PASSWORD'
                 }
             }
         }
