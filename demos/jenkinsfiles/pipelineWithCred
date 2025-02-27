@@ -1,17 +1,15 @@
 pipeline {
     agent any
 
-    environment {
-        APP_ENV = 'production'
-        APP_DEBUG = 'false'
-    }
-
     stages {
-        stage('Build') {
+        stage('Deploy') {
             steps {
-                echo "Building Volt app in environment: ${env.APP_ENV}"
-                echo "Debug mode is set to: ${env.APP_DEBUG}"
-                // Build steps here
+                withCredentials([usernamePassword(credentialsId: 'MyCredID', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    echo "Deploying with username ${env.USERNAME}"
+                    // Use the credentials in your deployment steps
+                    sh 'echo $USERNAME'
+                    sh 'echo $PASSWORD'
+                }
             }
         }
     }
