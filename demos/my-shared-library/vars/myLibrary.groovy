@@ -36,3 +36,18 @@ def testApp(){
     echo "testApp function is called from myLibrary.groovy"
     // Mock test running logic here
 }
+
+def askUserToAbort() {
+    echo "Asking user for input..."
+    def userInput = input(
+        id: 'userInput',
+        message: 'Do you want to abort the deployment?',
+        parameters: [[$class: 'ChoiceParameterDefinition', name: 'Proceed', choices: 'Proceed\nAbort', description: 'Choose to proceed or abort']]
+    )
+    
+    echo "The user input is: ${userInput}"
+    echo "askUser function is called from myLibrary.groovy"
+
+    return userInput
+}
+
