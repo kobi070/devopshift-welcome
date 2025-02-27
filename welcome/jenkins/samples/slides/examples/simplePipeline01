@@ -100,6 +100,20 @@ pipeline {
                 archiveArtifacts artifacts: "${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log", allowEmptyArchive: true // Archive the log file
             }
         }
+        stage("Archive Log2"){
+            steps{
+                script{
+                    sh'''!#/bin/bash
+                    echo "Archiving log file into ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log"
+                    ls -l
+                    pwd
+                    touch ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}2.log
+                    echo "flask_app" >> ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}2.log
+                    '''
+                    archiveArtifacts artifacts: "${BUILD_ID}_flask_app_${env.BUILD_NUMBER}2.log", allowEmptyArchive: true // Archive the log file
+                }
+            }
+        }
 
         stage('Verify Application') {
             steps {
