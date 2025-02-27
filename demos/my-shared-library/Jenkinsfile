@@ -30,6 +30,18 @@ pipeline {
             }
         }
 
+        stage{
+            steps{
+                script{
+                    def userChoice = myLibrary.askUserToAboart()
+                    if(userChoice == 'Abort'){
+                        error('User aborted the deployment')
+                        exit(1)
+                    }
+                }
+            }
+        }
+
         stage('Deploy') {
             steps {
                 script {
@@ -45,6 +57,16 @@ pipeline {
             script {
                 // Call a cleanup function from the shared library
                 myLibrary.cleanup()
+            }
+        }
+        abort{
+            script{
+                echo "The deployment was aborted"
+            }
+        }
+        proceed{
+            script{
+                echo "The deployment was successful"
             }
         }
     }
