@@ -81,6 +81,7 @@ pipeline {
         }
     }
 
+    // Post section
     post {
         success {
             echo 'Pipeline completed successfully ${env.BUILD_USER}'

@@ -1,0 +1,33 @@
+services:
+    jenkins:
+        build: ./jenkins/master
+        image: jenkins-jb/master:1.0
+        container_name: jenkins
+        ports:
+            - '8080:8080'
+            - '50000:50000'
+        volumes:
+            - './jenkins-docker-certs-master:/certs/client:ro'
+            - './jenkins-data-master:/var/jenkins_home'
+        networks: 
+            - jb
+    jenkins-slave:
+        build: ./jenkins/slave
+        image: jenkins-jb/slave:1.0
+        container_name: jenkins-slave 
+        restart: always
+        environment:
+            - 'JENKINS_URL=http://jenkins:8080'
+        ports:
+            - "5005-5010:5005-5010"
+
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - './jenkins-data-slave:/var/jenkins_home'
+        networks: 
+        - jb
+        depends_on:
+            - jenkins
+
+networks: 
+  jb:
