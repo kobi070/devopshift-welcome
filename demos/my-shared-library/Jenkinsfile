@@ -60,7 +60,7 @@ pipeline {
                 myLibrary.cleanup()
             }
         }
-        abort{
+        aborted{
             script{
                 echo "The deployment was aborted"
             }
