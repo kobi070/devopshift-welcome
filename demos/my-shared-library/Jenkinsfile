@@ -30,7 +30,7 @@ pipeline {
             }
         }
 
-        stage{
+        stage('Ask user to abort')  // This stage will only run if the previous stage fails{
             steps{
                 script{
                     def userChoice = myLibrary.askUserToAboart()

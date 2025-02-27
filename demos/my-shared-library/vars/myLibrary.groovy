@@ -47,6 +47,7 @@ def askUserToAbort() {
     
     echo "The user input is: ${userInput}"
     echo "askUser function is called from myLibrary.groovy"
+    echo "User input is: ${userInput}"
 
     return userInput
 }
