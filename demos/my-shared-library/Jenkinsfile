@@ -13,6 +13,23 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            steps{
+                script{
+                    myLibrary.testApp()
+                }
+            }
+        }
+
+        stage('Stage for a few groovy functions') {
+            steps{
+                script{
+                    myLibrary.whichBranch(env.BRANCH_NAME)
+                    myLibrary.getVersion()
+                }
+            }
+        }
+
         stage('Deploy') {
             steps {
                 script {
