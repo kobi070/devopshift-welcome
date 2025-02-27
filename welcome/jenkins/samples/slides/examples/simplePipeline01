@@ -88,6 +88,18 @@ pipeline {
             }
         }
 
+        stage("Archive Log"){
+            steps{
+                sh'''
+                echo "Archiving log file into ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log"
+                ls -l
+                touch ${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log
+                echo >> ${BUILD_ID}_flask_app_${env.BUILD_NUMBER} has an error or something wrong.
+                '''
+                archiveArtifacts artifacts: '/${BUILD_ID}_flask_app_${env.BUILD_NUMBER}.log', allowEmptyArchive: true // Archive the log file
+            }
+        }
+
         stage('Verify Application') {
             steps {
                 dir("${PROJECT_HOME}") {
