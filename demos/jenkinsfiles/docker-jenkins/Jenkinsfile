@@ -11,7 +11,8 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image ${IMAGE_NAME}..."
-                    docker.build(env.IMAGE_NAME, '/demos/jenkinsfiles/docker-jenkins/')
+                    // Ensure that Dockerfile and context directory are correct
+                    docker.build(env.IMAGE_NAME, 'demos/jenkinsfiles/docker-jenkins/')
                 }
             }
         }
@@ -30,12 +31,11 @@ pipeline {
 
         stage('Clean Up') {
             steps {
-                sh 'docker rmi ${IMAGE_NAME}'
+                // Use double quotes for variable substitution in shell commands
+                sh "docker rmi ${IMAGE_NAME}"
             }
         }
     }
-
-
 
     post {
         always {
