@@ -18,6 +18,7 @@ pipeline {
                                             echo "Starting stage: ${stageName}"
                                             sh command }
                     }
+                    env.runStage = runStage
                 }
             }
         }
