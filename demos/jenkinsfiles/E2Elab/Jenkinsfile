@@ -94,9 +94,14 @@ pipeline {
 
     post {
         always {
-            // TIP: Add cleanup steps here if necessary
             echo "Pipeline completed."
-            sh "docker rmi -f ${REPO_NAME}:${PYTHON_VERSIONS}"
+            // Clean up Docker images for each Python version
+            script {
+                def pythonVersions = ['3.8', '3.9', '3.10']
+                pythonVersions.each { version ->
+                    sh "docker rmi -f ${REPO_NAME}:${version}"
+                }
+            }
         }
     }
 }
