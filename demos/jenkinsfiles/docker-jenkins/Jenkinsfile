@@ -11,8 +11,7 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image ${IMAGE_NAME}..."
-                    sh "ls -l"
-                    docker.build(env.IMAGE_NAME)
+                    docker.build(env.IMAGE_NAME, './demos/jenkinsfiles/docker-jenkins/Dockerfile')
                 }
             }
         }
