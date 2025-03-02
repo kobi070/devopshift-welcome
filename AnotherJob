@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Call Another Job') {
+            steps {
+                build job: 'parameters1', 
+                      wait: true,  // Wait for completion before continuing
+                      parameters: [
+                          string(name: 'DEPLOY_ENV', value: 'jenkinsclass_env'),
+                          booleanParam(name: 'RUN_TESTS', value: false)
+                      ]
+            }
+        }
+    }
+}

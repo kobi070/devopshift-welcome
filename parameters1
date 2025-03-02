@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    
+    parameters {
+        string(name: 'DEPLOY_ENV', defaultValue: 'staging', description: 'Deployment environment')
+        booleanParam(name: 'RUN_TESTS', defaultValue: true, description: 'Run tests before deployment')
+        choice(name: 'REGION', choices: ['us-east-1', 'us-west-2', 'eu-west-1'], description: 'AWS region to deploy to')
+        password(name: 'API_KEY', defaultValue: '', description: 'API key for deployment')
+        text(name: 'RELEASE_NOTES', defaultValue: '', description: 'Release notes for this deployment')
+    }
+    
+    stages {
+        stage('Example') {
+            steps {
+                echo "Deploying to ${params.DEPLOY_ENV} in region ${params.REGION}"
+                
+                script {
+                    if (params.RUN_TESTS) {
+                        echo "Running tests before deployment"
+                        // Test commands here
+                    }
+                }
+                
+                echo "Using API key: ${params.API_KEY}" // Be careful with displaying sensitive values
+                echo "Release notes: ${params.RELEASE_NOTES}"
+            }
+        }
+    }
+}
