@@ -96,7 +96,7 @@ pipeline {
         always {
             // TIP: Add cleanup steps here if necessary
             echo "Pipeline completed."
-            sh "docker rmi -f $(docker images -q)"
+            sh "docker rmi -f ${REPO_NAME}:${PYTHON_VERSIONS}"
         }
     }
 }
