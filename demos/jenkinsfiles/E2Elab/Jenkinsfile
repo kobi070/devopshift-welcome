@@ -12,6 +12,13 @@ pipeline {
     }
 
     stages {
+        stage('Clone Repository') {
+            steps {
+                // TIP: Clone the repository to get the Python app and Dockerfile
+                git url: GIT_REPO_URL, branch: REPO_BRANCH
+            }
+        }
+
         stage('Install Dependencies') {
             agent {
                 docker {
