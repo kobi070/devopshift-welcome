@@ -27,13 +27,15 @@ pipeline {
                 }
             }
         }
-    }
 
-    stage('Clean Up') {
-        steps {
-            sh 'docker rmi ${IMAGE_NAME}'
+        stage('Clean Up') {
+            steps {
+                sh 'docker rmi ${IMAGE_NAME}'
+            }
         }
     }
+
+
 
     post {
         always {
