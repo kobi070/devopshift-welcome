@@ -6,15 +6,15 @@ pipeline {
         PYTHON_VERSIONS = '3.8, 3.9'  // TIP: Define an array for the Python docker image tag versions for testing and building (ex. 3.8, 3.9)
         DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'  // TIP: Add DockerHub credentials in Jenkins and reference them here
         REPO_NAME = 'kobi070/demo-app'  // TIP: Replace with your DockerHub repository name
-        GIT_REPO_URL = 'https://github.com/kobi070/devopshift-welcome.git'  // The repository URL
-        REPO_BRANCH = 'jenkins-workshop'  // The commit hash to reference
+        GITHUB_REPO = 'https://github.com/kobi070/devopshift-welcome.git'  // The repository URL
+        GITHUB_BRANCH = 'jenkins-workshop'  // The commit hash to reference
     }
 
     stages {
             stage('Clone Repository') {
                 steps {
                     // Clone the repository containing the Python script and Dockerfile
-                    git REPO_BRANCH: "${GITHUB_BRANCH}", GIT_REPO_URL: "${GITHUB_REPO}"
+                    git branch: "${GITHUB_BRANCH}", url: "${GITHUB_REPO}"
                 }
             }
 
@@ -49,8 +49,8 @@ pipeline {
                             steps {
                                 sh """
                                 pip install faker
-                                wget https://raw.githubusercontent.com/nashpaz123/devopshift-welcome/refs/heads/jenkins-workshop/welcome/app/faker/app.py
-                                wget https://raw.githubusercontent.com/nashpaz123/devopshift-welcome/refs/heads/jenkins-workshop/welcome/app/faker/Dockerfile
+                                wget https://raw.githubusercontent.com/kobi070/devopshift-welcome/refs/heads/jenkins-workshop/welcome/app/faker/app.py
+                                wget https://raw.githubusercontent.com/kobi070/devopshift-welcome/refs/heads/jenkins-workshop/welcome/app/faker/Dockerfile
                                 python app.py
                                 """
                             }
