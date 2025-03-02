@@ -6,18 +6,18 @@ pipeline {
         GIT_BRANCH = 'jenkins-workshop'
         GIT_URI = 'https://github.com/kobi070/devopshift-welcome.git'
     }
-    def runStage = { stageName, command ->
-                        stage(stageName) {
-                            echo "Starting stage: ${stageName}"
-                            sh command
-                        }
-                    }
 
     stages {
         stage('Initialize') {
             steps {
                 script {
                     echo "Initializing pipeline..."
+                    def runStage = { stageName, command ->
+                        stage(stageName) {
+                            echo "Starting stage: ${stageName}"
+                            sh command
+                        }
+                    }
                 }
             }
         }
