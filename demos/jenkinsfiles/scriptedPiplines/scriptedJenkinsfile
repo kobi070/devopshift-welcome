@@ -1,88 +1,99 @@
-pipeline{
+pipeline {
     agent any
 
-    environment{
+    environment {
         PROJECT_HOME = "${WORKSPACE}"
         GIT_BRANCH = 'jenkins-workshop'
         GIT_URI = 'https://github.com/kobi070/devopshift-welcome.git'
     }
 
-    def stagesToRun = ["Clone", "Build", "Test", "Deploy", "Clean"]
+    stages {
+        stage('Initialize') {
+            steps {
+                script {
+                    def stagesToRun = ["Clone", "Build", "Test", "Deploy", "Clean"]
 
-    // Define a reusable function
-    def runStage = { stageName, command ->
-        stage(stageName) {
-            echo "Starting stage: ${stageName}"
-            sh command
+                    // Define a reusable function
+                    def runStage = { stageName, command ->
+                        stage(stageName) {
+                            echo "Starting stage: ${stageName}"
+                            sh command
+                        }
+                    }
+
+                    // Run initial defined stages
+                    stagesToRun.each { stageName ->
+                        runStage(stageName, "echo 'Running stage: ${stageName}'")
+                    }
+                }
+            }
         }
-    }
 
-    stagesToRun.each { stageName ->
-        runStage(stageName, "echo 'Running stage: ${stageName}'")
-    }
-
-    stages{
-        stage('Clone Repository'){
-            steps{
+        stage('Clone Repository') {
+            steps {
                 echo "Cloning repository..."
             }
         }
-        
-        stage('Build from Github'){
-            steps{
+
+        stage('Build from Github') {
+            steps {
                 echo "Building Python project..."
             }
         }
 
-        stage('Parallel Tests'){
-                parallel{
-                    'Lint':
-                    {
-                        stageToRun('Lint', 'echo "Running Python linting (e.g., flake8)..."')
-                    },
-                    'Security Test':
-                    {
-                        stageToRun('Security Test', 'Running security checks (e.g., safety)...')
-                                            },
-                    failFast: true // fail the pipeline if any stage fails
+        stage('Parallel Tests') {
+            steps {
+                script {
+                    parallel(
+                        "Lint": {
+                            stage('Lint') {
+                                echo "Running Python linting (e.g., flake8)..."
+                            }
+                        },
+                        "Security Test": {
+                            stage('Security Test') {
+                                echo "Running security checks (e.g., safety)..."
+                            }
+                        },
+                        failFast: true // Fail pipeline if any parallel stage fails
+                    )
                 }
             }
+        }
 
-        stage('Deploy to Dev'){
-            steps{
-                script{
+        stage('Deploy to Dev') {
+            steps {
+                script {
                     def userInput = input message: 'Do you want to deploy to Dev?',
-                                        parameters: [choice(name: 'Proceed', choices: ['Proceed', 'Abort'])]
+                        parameters: [choice(name: 'Proceed', choices: ['Proceed', 'Abort'])]
+
                     env.USER_CHOICE = userInput
                 }
             }
         }
 
-        stage('Abort Deployment'){
-            when{
-                expression{
-                    return env.USER_CHOICE == 'Abort'
-                }
+        stage('Abort Deployment') {
+            when {
+                expression { env.USER_CHOICE == 'Abort' }
             }
-            steps{
+            steps {
                 echo 'Deployment Aborted'
             }
         }
 
-        stage('Deploy to Dev'){
-            when{
-                expression{
-                    return env.USER_CHOICE == 'Proceed'
-                }
+        stage('Proceed with Deployment') {
+            when {
+                expression { env.USER_CHOICE == 'Proceed' }
             }
-            steps{
+            steps {
                 echo "Deploying Python project to production..."
             }
         }
 
-        // Post actions
         stage('Cleanup') {
-            runStage('Cleanup', 'echo "Cleaning up workspace..."')
+            steps {
+                echo "Cleaning up workspace..."
+            }
         }
     }
 }
