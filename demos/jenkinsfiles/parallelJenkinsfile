@@ -23,8 +23,8 @@ pipeline {
                         echo 'Running integration tests...'
                     }
                 },
-                failFast: true
             )
+            failFast: true
         }
         // Stage 3 - Deploy
         stage('Stage 3 - Deploy'){
