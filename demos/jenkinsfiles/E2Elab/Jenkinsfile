@@ -5,10 +5,9 @@ pipeline {
     environment {
         PYTHON_VERSIONS = '3.8, 3.9'  // TIP: Define an array for the Python docker image tag versions for testing and building (ex. 3.8, 3.9)
         DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'  // TIP: Add DockerHub credentials in Jenkins and reference them here
-        REPO_NAME = 'your-dockerhub-repository-name'  // TIP: Replace with your DockerHub repository name
+        REPO_NAME = 'kobi070/demo-app'  // TIP: Replace with your DockerHub repository name
         GIT_REPO_URL = 'https://github.com/kobi070/devopshift-welcome.git'  // The repository URL
         REPO_BRANCH = 'jenkins-workshop'  // The commit hash to reference
-        APP_DIR = 'welcome/app/faker'  // Path to the application folder
     }
 
     stages {
@@ -110,8 +109,7 @@ pipeline {
 
     post {
         always {
-            // TIP: Add cleanup steps here if necessary
-            cleanWs()  // Clean up workspace after the pipeline
+            echo 'Pipeline completed successfully'
         }
     }
 }
