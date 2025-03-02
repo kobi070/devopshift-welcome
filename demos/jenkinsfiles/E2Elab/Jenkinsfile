@@ -9,12 +9,12 @@ pipeline {
         GIT_REPO_URL = 'https://github.com/kobi070/devopshift-welcome.git'  // The repository URL
         REPO_BRANCH = 'jenkins-workshop'  // The commit hash to reference
     }
-    
+
     stages {
             stage('Clone Repository') {
                 steps {
                     // Clone the repository containing the Python script and Dockerfile
-                    git branch: "${GITHUB_BRANCH}", url: "${GITHUB_REPO}"
+                    git REPO_BRANCH: "${GITHUB_BRANCH}", GIT_REPO_URL: "${GITHUB_REPO}"
                 }
             }
 
