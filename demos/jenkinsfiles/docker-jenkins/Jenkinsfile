@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = 'dockerhub-credentials' // ID of the DockerHub credentials
-        IMAGE_NAME = 'kobi070/demo-app:latest'
+        IMAGE_NAME = 'kobi070/demo-app:1.0'
     }
 
     stages {

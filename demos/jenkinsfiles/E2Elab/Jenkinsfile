@@ -3,21 +3,22 @@ pipeline {
 
     // Define environment variables
     environment {
-        PYTHON_VERSIONS = ["python:latest", "python:3.8-slim"] // TIP: Define an array for the Python docker image tag versions for testing and building (ex. 3.3 …)
+        PYTHON_VERSIONS = ['python:latest', 'python:3.8-slim'] // TIP: Define an array for the Python docker image tag versions for testing and building (ex. 3.3 …)
         DOCKERHUB_CREDENTIALS = 'dockerhub-credentials' // TIP: Add DockerHub credentials in Jenkins and reference them here
-        REPO_NAME =  // TIP: Replace with your DockerHub repository name
+        REPO_NAME = 'kobi070/demo-app' // TIP: Replace with your DockerHub repository name
     }
 
     stages {
         stage('Install Dependencies') {
             agent {
                 docker {
-                    image '?' // TIP: Use a Python image for installing dependencies or use the matrix
-                    args '?' // TIP: Mount the pip cache for reuse in future stages (pip folder is: $HOME/.cache/pip:/root/.cache/pip')
+                    image 'python:latest' // TIP: Use a Python image for installing dependencies or use the matrix
+                    args '-v :/root/.cache/pip' // TIP: Mount the pip cache for reuse in future stages (pip folder is: $HOME/.cache/pip:/root/.cache/pip')
                 }
             }
             steps {
                 // TIP: Run a command to install the python faker library here ( pip instal ...)
+                sh 'pip install faker'
             }
         }
 
