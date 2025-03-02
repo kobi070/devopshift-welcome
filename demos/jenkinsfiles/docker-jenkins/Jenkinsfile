@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = 'dockerhub-credentials-demo' // ID of the DockerHub credentials
-        IMAGE_NAME = 'frenzy669/web'
+        DOCKERHUB_CREDENTIALS = 'dockerhub-credentials' // ID of the DockerHub credentials
+        IMAGE_NAME = 'kobi070/demo-app:latest'
     }
 
     stages {
