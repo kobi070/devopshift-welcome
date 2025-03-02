@@ -11,12 +11,7 @@ pipeline {
         stage('Initialize') {
             steps {
                 script {
-                    def runStage = { stageName, command ->
-                        stage(stageName) {
-                            echo "Starting stage: ${stageName}"
-                            sh command
-                        }
-                    }
+                    echo "Initializing pipeline..."
                 }
             }
         }
@@ -24,7 +19,8 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 script {
-                    runStage('Clone Repository', "echo 'Cloning repository...'")
+                    echo "Cloning repository..."
+                    sh "git clone -b ${GIT_BRANCH} ${GIT_URI} ${PROJECT_HOME}"
                 }
             }
         }
@@ -32,23 +28,27 @@ pipeline {
         stage('Build from Github') {
             steps {
                 script {
-                    runStage('Build from Github', "echo 'Building Python project...'")
+                    echo "Building Python project..."
+                    sh "echo 'Simulating build process...'"
                 }
             }
         }
 
         stage('Parallel Tests') {
-            steps {
-                script {
-                    parallel(
-                        "Lint": {
-                            runStage('Lint', "echo 'Running Python linting (e.g., flake8)...'")
-                        },
-                        "Security Test": {
-                            runStage('Security Test', "echo 'Running security checks (e.g., safety)...'")
-                        },
-                        failFast: true // Fail pipeline if any parallel stage fails
-                    )
+            parallel {
+                stage('Lint') {
+                    steps {
+                        script {
+                            echo "Running Python linting (e.g., flake8)..."
+                        }
+                    }
+                }
+                stage('Security Test') {
+                    steps {
+                        script {
+                            echo "Running security checks (e.g., safety)..."
+                        }
+                    }
                 }
             }
         }
@@ -69,7 +69,7 @@ pipeline {
             }
             steps {
                 script {
-                    runStage('Abort Deployment', "echo 'Deployment Aborted'")
+                    echo "Deployment Aborted"
                 }
             }
         }
@@ -80,7 +80,7 @@ pipeline {
             }
             steps {
                 script {
-                    runStage('Proceed with Deployment', "echo 'Deploying Python project to production...'")
+                    echo "Deploying Python project to production..."
                 }
             }
         }
@@ -88,7 +88,8 @@ pipeline {
         stage('Cleanup') {
             steps {
                 script {
-                    runStage('Cleanup', "echo 'Cleaning up workspace...'")
+                    echo "Cleaning up workspace..."
+                    sh "rm -rf ${PROJECT_HOME}"
                 }
             }
         }
