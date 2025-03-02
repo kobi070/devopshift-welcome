@@ -6,7 +6,6 @@ pipeline {
         PYTHON_VERSIONS = '3.8 3.9 3.10' // TIP: Define an array for the Python docker image tag versions for testing and building (ex. 3.3 …)
         DOCKERHUB_CREDENTIALS = 'dockerhub-credentials' // TIP: Add DockerHub credentials in Jenkins and reference them here
         REPO_NAME = 'kobi070/demo-app' // TIP: Replace with your DockerHub repository name
-        HOME = ''
     }
 
     stages {
@@ -19,7 +18,10 @@ pipeline {
             }
             steps {
                 // TIP: Run a command to install the python faker library here ( pip instal ...)
+                sh 'ls -l'
                 sh 'pip install faker'
+                sh 'wget https://raw.githubusercontent.com/kobi070/devopshift-welcome/e107bdbf616df2c046ad5d7f4fcedf179e5dedff/welcome/app/faker/app.py'
+                sh 'wget https://raw.githubusercontent.com/kobi070/devopshift-welcome/e107bdbf616df2c046ad5d7f4fcedf179e5dedff/welcome/app/faker/Dockerfile'
             }
         }
 
@@ -60,7 +62,8 @@ pipeline {
                         steps {
                             // TIP: Use docker.build with build arguments to build an image for the Python version
                             script {
-                                docker.build("${REPO_NAME}:${PYTHON_VERSIONS}")
+                                // sh "docker build --build-arg PYTHON_VERSION=${PYTHON_VERSION} -t ${REPO_NAME}:${PYTHON_VERSION} ." // TIP: Use the Docker CLI to build the image
+                                docker.build("${REPO_NAME}:${PYTHON_VERSIONS}", "--build-arg PYTHON_VERSION=${PYTHON_VERSIONS}", "-t ${REPO_NAME}:${PYTHON_VERSION}")
                             } 
                         }
                     }
