@@ -1,93 +1,63 @@
 node {
-    agent any
+    // 'agent' and 'environment' declarations can't be inside 'node' block
+    // They're moved to properties that work in scripted pipelines
+    
+    // Set environment variables
+    env.PROJECT_HOME = "${WORKSPACE}"
+    env.GIT_BRANCH = 'jenkins-workshop'
+    env.GIT_URI = 'https://github.com/kobi070/devopshift-welcome.git'
 
-    environment {
-        PROJECT_HOME = "${WORKSPACE}"
-        GIT_BRANCH = 'jenkins-workshop'
-        GIT_URI = 'https://github.com/kobi070/devopshift-welcome.git'
+    // Define a reusable function at the top level
+    def runStage = { stageName, command ->
+        stage(stageName) {
+            echo "Starting stage: ${stageName}"
+            sh command 
+        }
     }
 
-    stages{
+    stage('Initial Setup') {
+        echo "Setting up environment..."
+    }
+    
+    stage('Clone Repository') {
+        runStage('Clone', "Clone ${GIT_URI}")
+    }
 
-        stage('Initial Setup') {
-            steps{
-                script{
-                        // Define a reusable function
-                        def runStage = { stageName, command ->
-                                        stage(stageName) {
-                                            echo "Starting stage: ${stageName}"
-                                            sh command }
-                    }
-                    env.runStage = runStage
-                }
-            }
-        }
-        stage('Clone Repository') {
-            steps {
-                runStage('Clone', "Clone ${GIT_URI}")
-            }
-        }
+    stage('Build from Github') {
+        runStage('Build', "Build Python project")
+    }
 
-        stage('Build from Github') {
-            steps {
-                runStage('Build', "Build Python project")
-            }
-        }
+    stage('Parallel Tests') {
+        parallel(
+            "Lint": {
+                runStage('Lint', "Running Python linting (e.g., flake8)...")
+            },
+            "Security Test": {
+                runStage('Security Test', "Running security checks (e.g., bandit)...")
+            },
+            failFast: true // Fail pipeline if any parallel stage fails
+        )
+    }
 
-        stage('Parallel Tests') {
-            steps {
-                script {
-                    parallel(
-                        "Lint": {
-                            stage('Lint') {
-                                runStage('Lint', "Running Python linting (e.g., flake8)...")
-                            }
-                        },
-                        "Security Test": {
-                            stage('Security Test') {
-                                runStage('Security Test', "Running security checks (e.g., bandit)...")
-                            }
-                        },
-                        failFast: true // Fail pipeline if any parallel stage fails
-                    )
-                }
-            }
-        }
+    stage('Deploy to Dev') {
+        def userInput = input message: 'Do you want to deploy to Dev?',
+            parameters: [choice(name: 'Proceed', choices: ['Proceed', 'Abort'])]
 
-        stage('Deploy to Dev') {
-            steps {
-                script {
-                    def userInput = input message: 'Do you want to deploy to Dev?',
-                        parameters: [choice(name: 'Proceed', choices: ['Proceed', 'Abort'])]
+        env.USER_CHOICE = userInput
+    }
 
-                    env.USER_CHOICE = userInput
-                }
-            }
-        }
-
+    if (env.USER_CHOICE == 'Abort') {
         stage('Abort Deployment') {
-            when {
-                expression { env.USER_CHOICE == 'Abort' }
-            }
-            steps {
-                runStage('Abort', "Aborting deployment...")
-            }
+            runStage('Abort', "Aborting deployment...")
         }
-
+    } else {
         stage('Proceed with Deployment') {
-            when {
-                expression { env.USER_CHOICE == 'Proceed' }
-            }
-            steps {
-                echo "Deploying Python project to production..."
-                runStage('Deploy', "Deploying Python project to production...")
-            }
+            echo "Deploying Python project to production..."
+            runStage('Deploy', "Deploying Python project to production...")
         }
+    }
 
-        stage('Cleanup') {
-            steps {
-                runStage('Cleanup', "Cleaning up workspace...")
-            }
-        }
+    stage('Cleanup') {
+        runStage('Cleanup', "Cleaning up workspace...")
     }
 }
