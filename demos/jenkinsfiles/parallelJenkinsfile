@@ -1,0 +1,39 @@
+pipline{
+    agent any
+
+    stages{
+        stage('Stage 1 - Build'){
+            steps{
+                echo 'Building the application...'
+            }
+        }
+
+        stage('Stage 2 - Parallel Test'){
+            parallel{
+                'Stage 1 - Unit Test':{
+                    steps{
+                        echo 'Running unit tests...'
+                    }
+                },
+                'Stage 2 - Integration Test':{
+                    steps{
+                        echo 'Running integration tests...'
+                    }
+                },
+                failFast: true
+            }
+        }
+
+        stage('Stage 3 - Deploy'){
+            steps{
+                echo 'Deploying the application...'
+            }
+        }
+
+        stage('Stage 4 - Cleanup'){
+            steps{
+                echo 'Cleanning up...'
+            }
+        }
+    }
+}
