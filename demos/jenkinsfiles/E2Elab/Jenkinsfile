@@ -51,12 +51,11 @@ pipeline {
                             }
                         }
                         steps {
-                            dir(APP_DIR) {
-                                sh 'pip install faker'
-                                // sh 'wget https://raw.githubusercontent.com/kobi070/devopshift-welcome/e107bdbf616df2c046ad5d7f4fcedf179e5dedff/welcome/app/faker/Dockerfile'
-                                // sh 'wget https://raw.githubusercontent.com/kobi070/devopshift-welcome/e107bdbf616df2c046ad5d7f4fcedf179e5dedff/welcome/app/faker/app.py'
-                                sh 'python app.py'  // TIP: Runs the Python script here and validate its output (expecting exit code 0)
-                            }
+                            
+                            sh 'pip install faker'
+                            sh 'wget https://raw.githubusercontent.com/kobi070/devopshift-welcome/e107bdbf616df2c046ad5d7f4fcedf179e5dedff/welcome/app/faker/Dockerfile'
+                            sh 'wget https://raw.githubusercontent.com/kobi070/devopshift-welcome/e107bdbf616df2c046ad5d7f4fcedf179e5dedff/welcome/app/faker/app.py'
+                            sh 'python app.py'  // TIP: Runs the Python script here and validate its output (expecting exit code 0)          
                         }
                     }
                 }
