@@ -1,0 +1,88 @@
+pipeline{
+    agent any
+
+    environment{
+        PROJECT_HOME = "${WORKSPACE}"
+        GIT_BRANCH = 'jenkins-workshop'
+        GIT_URI = 'https://github.com/kobi070/devopshift-welcome.git'
+    }
+
+    def stagesToRun = ["Clone", "Build", "Test", "Deploy", "Clean"]
+
+    // Define a reusable function
+    def runStage = { stageName, command ->
+        stage(stageName) {
+            echo "Starting stage: ${stageName}"
+            sh command
+        }
+    }
+
+    stagesToRun.each { stageName ->
+        runStage(stageName, "echo 'Running stage: ${stageName}'")
+    }
+
+    stages{
+        stage('Clone Repository'){
+            steps{
+                echo "Cloning repository..."
+            }
+        }
+        
+        stage('Build from Github'){
+            steps{
+                echo "Building Python project..."
+            }
+        }
+
+        stage('Parallel Tests'){
+                parallel{
+                    'Lint':
+                    {
+                        stageToRun('Lint', 'echo "Running Python linting (e.g., flake8)..."')
+                    },
+                    'Security Test':
+                    {
+                        stageToRun('Security Test', 'Running security checks (e.g., safety)...')
+                                            },
+                    failFast: true // fail the pipeline if any stage fails
+                }
+            }
+
+        stage('Deploy to Dev'){
+            steps{
+                script{
+                    def userInput = input message: 'Do you want to deploy to Dev?',
+                                        parameters: [choice(name: 'Proceed', choices: ['Proceed', 'Abort'])]
+                    env.USER_CHOICE = userInput
+                }
+            }
+        }
+
+        stage('Abort Deployment'){
+            when{
+                expression{
+                    return env.USER_CHOICE == 'Abort'
+                }
+            }
+            steps{
+                echo 'Deployment Aborted'
+            }
+        }
+
+        stage('Deploy to Dev'){
+            when{
+                expression{
+                    return env.USER_CHOICE == 'Proceed'
+                }
+            }
+            steps{
+                echo "Deploying Python project to production..."
+            }
+        }
+
+        // Post actions
+        stage('Cleanup') {
+            runStage('Cleanup', 'echo "Cleaning up workspace..."')
+        }
+    }
+}
