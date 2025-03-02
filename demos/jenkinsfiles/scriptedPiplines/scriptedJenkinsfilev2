@@ -6,16 +6,21 @@ pipeline {
         GIT_BRANCH = 'jenkins-workshop'
         GIT_URI = 'https://github.com/kobi070/devopshift-welcome.git'
     }
-    // Define a reusable function
-    def runStage = { stageName, command ->
-                    stage(stageName) {
-                        echo "Starting stage: ${stageName}"
-                        sh command 
-                        }
-    
-    }
 
     stages{
+
+        stage('Initial Setup') {
+            steps{
+                script{
+                        // Define a reusable function
+                        def runStage = { stageName, command ->
+                                        stage(stageName) {
+                                            echo "Starting stage: ${stageName}"
+                                            sh command }
+                    }
+                }
+            }
+        }
         stage('Clone Repository') {
             steps {
                 runStage('Clone', "Clone ${GIT_URI}")
