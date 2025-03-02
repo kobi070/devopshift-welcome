@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = 'dockerhub-credentials' // ID of the DockerHub credentials
-        IMAGE_NAME = 'kobi070/demo-app:latest'
+        IMAGE_NAME = 'kobi070/demo-app:1.0'
     }
 
     stages {
@@ -11,6 +11,7 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image ${IMAGE_NAME}..."
+                    sh "ls -l"
                     docker.build(env.IMAGE_NAME)
                 }
             }
