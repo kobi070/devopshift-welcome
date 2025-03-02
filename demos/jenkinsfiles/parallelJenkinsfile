@@ -10,19 +10,21 @@ pipeline {
         }
         // Stage 2 - Parallel Test
         stage('Stage 2 - Parallel Test'){
-            parallel(
-                'Stage 1 - Unit Test': {
-                    steps{
-                        echo 'Running unit tests...'
+            steps{
+                parallel(
+                    'Stage 1 - Unit Test': {
+                        steps{
+                            echo 'Running unit tests...'
+                        }
+                    },
+                    'Stage 2 - Integration Test': {
+                        steps{
+                            echo 'Running integration tests...'
+                        }
                     }
-                },
-                'Stage 2 - Integration Test': {
-                    steps{
-                        echo 'Running integration tests...'
-                    }
-                }
-            )
-            failFast true
+                )
+                failFast true
+            }
         }
         // Stage 3 - Deploy
         stage('Stage 3 - Deploy'){
