@@ -9,95 +9,93 @@ pipeline {
         GIT_REPO_URL = 'https://github.com/kobi070/devopshift-welcome.git'  // The repository URL
         REPO_BRANCH = 'jenkins-workshop'  // The commit hash to reference
     }
-
+    
     stages {
-        stage('Clone Repository') {
-            steps {
-                // TIP: Clone the repository to get the Python app and Dockerfile
-                git url: GIT_REPO_URL, branch: REPO_BRANCH
-            }
-        }
-
-        stage('Install Dependencies') {
-            agent {
-                docker {
-                    image 'python:3.8' // TIP: Use a Python image for installing dependencies
-                    args '-v $HOME/.cache/pip:/root/.cache/pip' // TIP: Mount the pip cache for reuse in future stages
+            stage('Clone Repository') {
+                steps {
+                    // Clone the repository containing the Python script and Dockerfile
+                    git branch: "${GITHUB_BRANCH}", url: "${GITHUB_REPO}"
                 }
             }
-            steps {
-                // TIP: Run a command to install the Python faker library here
-                dir(APP_DIR) {
-                    sh 'pip install -r requirements.txt'  // Assuming you have a requirements.txt in your app folder
-                }
-            }
-        }
 
-        stage('Test Application') {
-            matrix {
-                axes {
-                    axis {
-                        name 'PYTHON_VERSION'  // TIP: Name your axis to reference the Python version
-                        values '3.8', '3.9'    // TIP: Optional to use the environment variable for versions
+            stage('Install Dependencies') {
+                agent {
+                    docker {
+                        image 'python:3.8' // Use a Python image for dependency installation
+                        args '-v $HOME/.cache/pip:/root/.cache/pip' // Caching pip dependencies to speed up builds
                     }
                 }
-                stages {
-                    stage('Run Test') {
-                        agent {
-                            docker {
-                                image "python:${PYTHON_VERSION}" // TIP: Dynamically select the Python version from the matrix
-                                reuseNode true // TIP: Reuse the workspace for Docker containers
+                steps {
+                    sh 'pip install faker' // Install the required Python package
+                }
+            }
+
+            stage('Test Application') {
+                matrix {
+                    axes {
+                        axis {
+                            name 'PYTHON_VERSION'
+                            values '3.8', '3.9'
+                        }
+                    }
+                    stages {
+                        stage('Run Test') {
+                            agent {
+                                docker {
+                                    image "python:${PYTHON_VERSION}" // Use the Python version from the matrix
+                                    reuseNode true // Reuse the same agent to prevent unnecessary overhead
+                                }
                             }
-                        }
-                        steps {
-                            
-                            sh 'pip install faker'
-                            sh 'wget https://raw.githubusercontent.com/kobi070/devopshift-welcome/e107bdbf616df2c046ad5d7f4fcedf179e5dedff/welcome/app/faker/Dockerfile'
-                            sh 'wget https://raw.githubusercontent.com/kobi070/devopshift-welcome/e107bdbf616df2c046ad5d7f4fcedf179e5dedff/welcome/app/faker/app.py'
-                            sh 'python app.py'  // TIP: Runs the Python script here and validate its output (expecting exit code 0)          
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Build Docker Images') {
-            matrix {
-                axes {
-                    axis {
-                        name 'PYTHON_VERSION' // TIP: Name your axis to reference the Python version
-                        values '3.8', '3.9'    // TIP: Use the environment variable for versions or define it here
-                    }
-                }
-                stages {
-                    stage('Build Image') {
-                        steps {
-                            // TIP: Use docker.build with build arguments to build an image for the Python version
-                            dir(APP_DIR) {
-                                sh "docker build --build-arg PYTHON_VERSION=${PYTHON_VERSION} -t ${REPO_NAME}:${PYTHON_VERSION} ."
-                                docker.build('${REPO_NAME}:${PYTHON_VERSION}', '--build-arg PYTHON_VERSION=${PYTHON_VERSION} .')
+                            steps {
+                                sh """
+                                pip install faker
+                                wget https://raw.githubusercontent.com/nashpaz123/devopshift-welcome/refs/heads/jenkins-workshop/welcome/app/faker/app.py
+                                wget https://raw.githubusercontent.com/nashpaz123/devopshift-welcome/refs/heads/jenkins-workshop/welcome/app/faker/Dockerfile
+                                python app.py
+                                """
                             }
                         }
                     }
                 }
             }
-        }
 
-        stage('Push to DockerHub') {
-            matrix {
-                axes {
-                    axis {
-                        name 'PYTHON_VERSION' // TIP: Name your axis to reference the Python version
-                        values '3.8', '3.9'    // TIP: Use the environment variable for versions or define it here
+            stage('Build Docker Images') {
+                matrix {
+                    axes {
+                        axis {
+                            name 'PYTHON_VERSION'
+                            values '3.8', '3.9'
+                        }
+                    }
+                    stages {
+                        stage('Build Image') {
+                            steps {
+                                script {
+                                    // Build the Docker image dynamically based on the Python version
+                                    docker.build("${REPO_NAME}:${PYTHON_VERSION}", "--build-arg PYTHON_VERSION=${PYTHON_VERSION} .")
+                                }
+                            }
+                        }
                     }
                 }
-                stages {
-                    stage('Push Image') {
-                        steps {
-                            // TIP: Use docker.withRegistry to authenticate and push the image to DockerHub
-                            script {
-                                docker.withRegistry('https://index.docker.io/v1/', credentialsId: DOCKERHUB_CREDENTIALS) {
-                                    sh "docker push ${REPO_NAME}:${PYTHON_VERSION}"
+            }
+
+            stage('Push to DockerHub') {
+                matrix {
+                    axes {
+                        axis {
+                            name 'PYTHON_VERSION'
+                            values '3.8', '3.9'
+                        }
+                    }
+                    stages {
+                        stage('Push Image') {
+                            steps {
+                                script {
+                                    // Push the built image to DockerHub using DockerHub credentials
+                                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
+                                        docker.image("${REPO_NAME}:${PYTHON_VERSION}").push() // Push each image
+                                    }
                                 }
                             }
                         }
@@ -105,11 +103,10 @@ pipeline {
                 }
             }
         }
-    }
 
-    post {
-        always {
-            echo 'Pipeline completed successfully'
+        post {
+            always {
+                echo "Pipeline completed."
+            }
         }
-    }
 }
