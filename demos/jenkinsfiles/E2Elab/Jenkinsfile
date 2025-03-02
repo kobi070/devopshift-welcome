@@ -7,7 +7,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'  // TIP: Add DockerHub credentials in Jenkins and reference them here
         REPO_NAME = 'your-dockerhub-repository-name'  // TIP: Replace with your DockerHub repository name
         GIT_REPO_URL = 'https://github.com/kobi070/devopshift-welcome.git'  // The repository URL
-        REPO_BRANCH = 'e107bdbf616df2c046ad5d7f4fcedf179e5dedff'  // The commit hash to reference
+        REPO_BRANCH = 'jenkins-workshop'  // The commit hash to reference
         APP_DIR = 'welcome/app/faker'  // Path to the application folder
     }
 
