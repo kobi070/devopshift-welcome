@@ -6,11 +6,11 @@ image:
 
 details:
   image: docker.io/istio/examples-bookinfo-details-v1
-  replicaCount: 1
+  replicaCount: 2
 
 ratings:
   image: docker.io/istio/examples-bookinfo-ratings-v1
-  replicaCount: 1
+  replicaCount: 2
 
 reviews:
   image: docker.io/istio/examples-bookinfo-reviews-v1
