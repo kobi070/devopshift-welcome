@@ -47,7 +47,7 @@ spec:
       serviceAccountName: bookinfo-productpage
       containers:
       - name: productpage
-        image: {{ .Values.productpage.image }}:{{ .Values.image.tag }}
+        image: {{ .Values.productpage.image }}:{{ .Values.productpage.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: 9080
