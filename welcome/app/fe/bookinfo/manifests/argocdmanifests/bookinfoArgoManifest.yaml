@@ -16,6 +16,11 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncHooks:
+      - hook: PreSync
+        command: ["sh", "-c", "echo 'Hello from PreSync hook!'"]
+      - hook: PostSync
+        command: ["sh", "-c", "echo 'Hello from PostSync hook!'"]
 
   # webhook:
   #   github:
