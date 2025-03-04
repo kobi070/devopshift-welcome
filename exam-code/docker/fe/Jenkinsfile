@@ -34,8 +34,10 @@ pipeline {
                     },
                     'Security'{
                         sh 'bandit -r .'
+                    }
                 }
             }
+            
         }
         
         stage('Install Dependencies') {
