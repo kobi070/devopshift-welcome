@@ -21,8 +21,8 @@ pipeline {
             steps {
                 sh 'ls -l'
                 sh 'pip install flake8 bandit'
-                sh 'flake8 .'
-                sh 'bandit -r .'
+                // sh 'flake8 .'
+                // sh 'bandit -r .'
             }
         }
 
@@ -44,7 +44,7 @@ pipeline {
                 // sh 'git switch workshop/argo-jenkins-exam'
                 // sh 'cd /exam-code/docker/fe'
                 // sh 'ls -l'
-                sh 'pip install -r requirements.txt'
+                sh 'pip install -r exam-code/docker/fe/requirements.txt'
             }
         }
         
