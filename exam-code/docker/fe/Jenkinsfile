@@ -71,7 +71,8 @@ pipeline {
                 sh 'docker-compose --version'
                 sh 'ls -l'
                 sh 'docker-compose up -f exam-code/docker/ -d'
-                sleep time: 10, unit: 'SECONDS'  // Wait for services to start
+                sh 'docker ps'
+                sleep time: 30, unit: 'SECONDS'  // Wait for services to start
                 sh 'curl -f http://localhost:5002 || exit 1'  // Adjust port for backend if needed
                 sh 'docker-compose down -f exam-code/docker/'
             }
