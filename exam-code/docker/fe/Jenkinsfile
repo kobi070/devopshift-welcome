@@ -19,6 +19,7 @@ pipeline {
         
         stage('install Lint & Security Scan') {
             steps {
+                sh 'ls -l'
                 sh 'pip install flake8 bandit'
                 sh 'flake8 .'
                 sh 'bandit -r .'
@@ -40,8 +41,9 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
+                sh 'git chechout -b workshop/argo-jenkins-exam origin/workshop/argo-jenkins-exam'
                 sh 'ls -l'
-                sh 'pip install -r fe/requirements.txt'
+                sh 'pip install -r requirements.txt'
             }
         }
         
