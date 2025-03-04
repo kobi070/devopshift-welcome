@@ -9,12 +9,11 @@ pipeline {
         DOCKER_REGISTRY = 'yanivomc'
         REPO_NAME = 'fe-exam'  // Change to 'be-exam' for backend pipeline
         IMAGE_TAG = "${env.BUILD_NUMBER}"
-        HELM_REGISTRY = 'oci://your-helm-registry'
     }
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/your-org/your-repo.git'
+                git branch: 'workshop/argo-jenkis-exam', url: 'https://github.com/kobi070/devopshift-welcome.git'
             }
         }
         
