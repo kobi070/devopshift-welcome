@@ -61,21 +61,15 @@ pipeline {
                 sh "docker run --rm $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG pytest tests/"
             }
         }
+
         
-      stage('Install Compose'){
-        stage{
-            steps{
+        
+      stage('Integration Test with Docker Compose') {
+            steps {
+                dir('/exam-code/') {
                     sh 'curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose'
                     sh 'chmod +x /usr/local/bin/docker-compose'
                     sh 'docker-compose --version'
-            }
-        }
-      } 
-
-      
-      stage('Integration Test with Docker Compose') {
-            steps {
-                dir('/exam-code/docker') {
                     sh 'docker ps'
                     sh 'ls -l'
                     sh 'docker-compose -f docker-compose.yaml up -d'
