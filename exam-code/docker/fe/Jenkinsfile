@@ -1,9 +1,10 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.10'
-        }
-    }
+    // agent {
+    //     docker {
+    //         image 'python:3.10'
+    //     }
+    // }
+    agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds')
         DOCKER_REGISTRY = 'kobi070'
