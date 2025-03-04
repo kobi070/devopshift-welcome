@@ -9,11 +9,12 @@ pipeline {
         DOCKER_REGISTRY = 'yanivomc'
         REPO_NAME = 'fe-exam'  // Change to 'be-exam' for backend pipeline
         IMAGE_TAG = "${env.BUILD_NUMBER}"
+        // workshop/argo-jenkins-exam
     }
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'workshop/argo-jenkins-exam', url: 'https://github.com/kobi070/devopshift-welcome.git'
+                git branch: 'main', url: 'https://github.com/kobi070/devopshift-welcome.git'
             }
         }
         
@@ -41,9 +42,8 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // sh 'git switch workshop/argo-jenkins-exam'
-                // sh 'cd /exam-code/docker/fe'
-                // sh 'ls -l'
+                sh 'git switch workshop/argo-jenkins-exam'
+                sh 'ls -l'
                 sh 'pip install -r exam-code/docker/fe/requirements.txt'
             }
         }
