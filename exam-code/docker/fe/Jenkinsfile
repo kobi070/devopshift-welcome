@@ -61,11 +61,15 @@ pipeline {
                 sh "docker run --rm $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG pytest tests/"
             }
         }
+
+        
         
         stage('Integration Test with Docker Compose') {
             steps {
+                sh 'curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose'
+                sh 'chmod +x /usr/local/bin/docker-compose'
                 sh 'docker-compose --version'
-                sh 'docker compose up'
+                sh 'docker-compose up -d'
                 sleep time: 10, unit: 'SECONDS'  // Wait for services to start
                 sh 'curl -f http://localhost:5002 || exit 1'  // Adjust port for backend if needed
                 sh 'docker compose down'
