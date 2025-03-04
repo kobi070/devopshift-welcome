@@ -72,6 +72,7 @@ pipeline {
                     sh 'docker-compose --version'
                     sh 'docker ps'
                     sh 'ls -l'
+                    sh 'docker-compose -f docker-compose.yaml down'
                     sh 'docker-compose -f docker-compose.yaml up -d'
                     sh 'docker ps'
                     sleep time: 120, unit: 'SECONDS'  // Wait for services to start
