@@ -70,9 +70,6 @@ pipeline {
                     sh 'curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose'
                     sh 'chmod +x /usr/local/bin/docker-compose'
                     sh 'docker-compose --version'
-                    sh 'docker ps'
-                    sh 'ls -l'
-                    sh 'docker-compose -f docker-compose.yaml down'
                     sh 'docker-compose -f docker-compose.yaml up -d'
                     sleep time: 30, unit: 'SECONDS'  // Wait for services to start
                     sh 'docker ps'
