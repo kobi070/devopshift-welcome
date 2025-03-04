@@ -42,6 +42,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh 'git checkout -b workshop/argo-jenkins-exam origin/workshop/argo-jenkins-exam'
+                sh 'cd exam-code/docker/fe'
                 sh 'ls -l'
                 sh 'pip install -r requirements.txt'
             }
