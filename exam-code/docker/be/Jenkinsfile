@@ -1,0 +1,95 @@
+pipeline {
+    // agent {
+    //     docker {
+    //         image 'python:3.10'
+    //     }
+    // }
+    agent any
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds')
+        DOCKER_REGISTRY = 'kobi070'
+        REPO_NAME = 'be-exam'  // Change to 'be-exam' for backend pipeline
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
+        // workshop/argo-jenkins-exam
+    }
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/kobi070/devopshift-welcome.git'
+            }
+        }
+        
+        stage('install Lint & Security Scan') {
+            steps {
+                sh 'ls -l'
+                sh 'pip install flake8 bandit'
+            }
+        }
+
+        stage('Parallel Lint & Security Scan') {
+            steps {
+                parallel(
+                    Lint: {
+                        sh 'flake8 .'
+                    },
+                    Security: {
+                        sh 'bandit -r .'
+                    }
+                )
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'git switch workshop/argo-jenkins-exam'
+                sh 'ls -l'
+                sh 'pip install -r exam-code/docker/be/requirements.txt'
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                sh 'ls -l'
+                // sh "docker build -t $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG ."
+                sh "docker build -t $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG exam-code/docker/be"
+                sh "docker tag $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG $DOCKER_REGISTRY/$REPO_NAME:latest"
+            }
+        }
+        
+        stage('Run Tests in Container') {
+            steps {
+                sh "docker run --rm $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG pytest tests/"
+            }
+        }
+
+        
+        
+      stage('Integration Test with Docker Compose') {
+            steps {
+                dir('exam-code/docker') {
+                    sh 'curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose'
+                    sh 'chmod +x /usr/local/bin/docker-compose'
+                    sh 'docker-compose --version'
+                    sh 'docker ps'
+                    sh 'ls -l'
+                    sh 'docker-compose -f docker-compose.yaml down'
+                    sh 'docker-compose -f docker-compose.yaml up -d'
+                    sleep time: 30, unit: 'SECONDS'  // Wait for services to start
+                    sh 'docker ps'
+                    sh 'curl -f http://localhost:5002 || exit 1'  // Adjust port for backend if needed
+                    sh 'docker-compose -f docker-compose.yaml down'
+                    sh 'docker ps'
+                }
+            }
+        }
+
+        
+        stage('Push to Docker Hub') {
+            steps {
+                sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                sh "docker push $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG"
+                sh "docker push $DOCKER_REGISTRY/$REPO_NAME:latest"
+            }
+        }
+    }
+}
