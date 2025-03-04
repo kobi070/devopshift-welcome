@@ -8,6 +8,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./src .
 
-CMD ["python", "mainfe.py"]
+CMD ["python", "main.py"]
 
 EXPOSE 5002
