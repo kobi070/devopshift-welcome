@@ -73,9 +73,7 @@ pipeline {
                     sh 'cat docker-compose.yaml'
                     sh 'docker-compose -f docker-compose.yaml up -d'
                     sleep time: 30, unit: 'SECONDS'  // Wait for services to start
-                    sh 'docker ps'
-                    // sh 'curl -f http://localhost:5002 || exit 1'  // Adjust port for backend if needed
-                    sh 'docker ps | grep -q 5002 && echo "Port 5002 is mapped and the container is running." || exit 1 ' // Adjust port for backend if needed
+                    sh 'docker ps -a | grep -q 5002 && echo "Port 5002 is mapped and the container is running." || exit 1 ' // Adjust port for backend if needed
                     sh 'docker-compose -f docker-compose.yaml down'
                     sh 'docker ps'
                 }
