@@ -26,19 +26,19 @@ pipeline {
             }
         }
 
-        stage('Parrallel Lint & Security Scan'){
-            steps{
-                parallel{
-                    'Lint'{
+        stage('Parallel Lint & Security Scan') {
+            steps {
+                parallel(
+                    Lint: {
                         sh 'flake8 .'
                     },
-                    'Security'{
+                    Security: {
                         sh 'bandit -r .'
                     }
-                }
+                )
             }
-            
         }
+
         
         stage('Install Dependencies') {
             steps {
