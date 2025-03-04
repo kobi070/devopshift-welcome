@@ -70,6 +70,7 @@ pipeline {
                 sh 'chmod +x /usr/local/bin/docker-compose'
                 sh 'docker-compose --version'
                 sh 'ls -l exam-code/docker/'
+                sh 'docker-compose --help'
                 sh 'docker-compose -f /exam-code/docker/docker-compose.yaml up -d'
                 sh 'docker ps'
                 sleep time: 30, unit: 'SECONDS'  // Wait for services to start
