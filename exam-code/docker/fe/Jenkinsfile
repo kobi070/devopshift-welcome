@@ -18,11 +18,23 @@ pipeline {
             }
         }
         
-        stage('Lint & Security Scan') {
+        stage('install Lint & Security Scan') {
             steps {
                 sh 'pip install flake8 bandit'
                 sh 'flake8 .'
                 sh 'bandit -r .'
+            }
+        }
+
+        stage('Parrallel Lint & Security Scan'){
+            steps{
+                parallel{
+                    'Lint'{
+                        sh 'flake8 .'
+                    },
+                    'Security'{
+                        sh 'bandit -r .'
+                }
             }
         }
         
@@ -59,13 +71,6 @@ pipeline {
                 sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
                 sh "docker push $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG"
                 sh "docker push $DOCKER_REGISTRY/$REPO_NAME:latest"
-            }
-        }
-        
-        stage('Update Helm OCI Chart') {
-            steps {
-                sh 'helm registry login $HELM_REGISTRY --username $DOCKERHUB_CREDENTIALS_USR --password $DOCKERHUB_CREDENTIALS_PSW'
-                sh "helm package helm-chart && helm push helm-chart-*.tgz $HELM_REGISTRY"
             }
         }
     }
