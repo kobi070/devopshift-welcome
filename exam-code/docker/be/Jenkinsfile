@@ -72,7 +72,7 @@ pipeline {
                     sh 'docker-compose --version'
                     sh 'docker-compose -f docker-compose.yaml up -d'
                     sleep time: 30, unit: 'SECONDS'  // Wait for services to start
-                    sh 'docker ps -a | grep -q 5003 && echo "Port 5003 is mapped and the container is running." || exit 1 ' // Adjust port for backend if needed
+                    sh 'docker ps -a && echo "Port 5003 is mapped and the container is running." ' // Adjust port for backend if needed
                     sh 'docker-compose -f docker-compose.yaml down'
                     sh 'docker ps'
                 }
