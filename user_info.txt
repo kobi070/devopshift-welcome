@@ -1,0 +1,3 @@
+GITBRANCH=argocd-workshop
+GITURL=github.com/kobi070/devopshift-welcome.git
+GITUSERNAME=kobi070

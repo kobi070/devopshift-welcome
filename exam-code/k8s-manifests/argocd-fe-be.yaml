@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: 'https://github.com/kobi070/devopshift-welcome.git'  # Replace with actual repo
     targetRevision: HEAD
-    path: exam-code/k8s-manifests  # Path to your YAML files
+    path: 'exam-code/k8s-manifests'  # Path to your YAML files
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: fe-be-app
