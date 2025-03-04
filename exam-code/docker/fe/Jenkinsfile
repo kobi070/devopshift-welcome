@@ -49,7 +49,8 @@ pipeline {
         
         stage('Build Docker Image') {
             steps {
-                sh "docker build -f exam-code/docker/fe/Dockerfile -t $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG ."
+                sh 'ls -l'
+                sh "docker build -t $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG ."
                 sh "docker tag $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG $DOCKER_REGISTRY/$REPO_NAME:latest"
             }
         }
