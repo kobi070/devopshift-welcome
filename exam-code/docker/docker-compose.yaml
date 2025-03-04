@@ -1,7 +1,7 @@
 services:
   web:
     build: ./fe
-    image: "kobi070/fe-exam:latest"  # Use your own repository here
+    image: "yanivomc/fe-exam:latest"
     ports:
       - "5002:5002"
     depends_on:
@@ -11,7 +11,7 @@ services:
 
   backend-service:
     build: ./be
-    image: "kobi070/be-exam:latest"  # Use your own repository here
+    image: "yanivomc/be-exam:latest"
     networks:
       - internal
     environment:
@@ -20,19 +20,23 @@ services:
       - MYSQL_PASSWORD=123456
 
   mysqldb:
-    image: mysql:5.7
-    networks:
-      - internal
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: crypto_db
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "--host=localhost", "--user=root", "--password=123456"]
-      interval: 30s
-      retries: 3
-      start_period: 2m   # 2 minute wait before health check starts
-      timeout: 20s
+      image: mysql:5.7
+      networks:
+        - internal
+      environment:
+        MYSQL_ROOT_PASSWORD: 123456
+        # create database name crypto_db
+        MYSQL_DATABASE: crypto_db
+      healthcheck:
+        test: ["CMD", "mysqladmin", "ping", "--host=localhost", "--user=root", "--password=123456"]
+        interval: 30s
+        retries: 3
+        start_period: 2m   # 2 minute wait before health check starts
+        timeout: 20s
 
 networks:
   internal:
     driver: bridge
+
+
+  
