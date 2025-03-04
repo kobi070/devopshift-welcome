@@ -64,7 +64,7 @@ pipeline {
         
         stage('Integration Test with Docker Compose') {
             steps {
-                sh 'docker compose up -d'
+                sh 'docker compose up'
                 sleep time: 10, unit: 'SECONDS'  // Wait for services to start
                 sh 'curl -f http://localhost:5002 || exit 1'  // Adjust port for backend if needed
                 sh 'docker-compose down'
