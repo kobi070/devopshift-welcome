@@ -70,13 +70,8 @@ pipeline {
                 sh 'chmod +x /usr/local/bin/docker-compose'
                 sh 'docker-compose --version'
                 sh 'ls -l'
-                dir('/exam-code/docker/'){
-                    sh 'docker-compose -f /exam-code/docker/docker-compose.yaml up -d'
-                    sh 'docker ps'
-                    sleep time: 30, unit: 'SECONDS'  // Wait for services to start
-                    sh 'curl -f http://localhost:5002 || exit 1'  // Adjust port for backend if needed
-                    sh 'docker-compose down -f exam-code/docker/'
-                }
+                sh 'cd exam-code/'
+                sh 'ls -l'
                 sh 'docker-compose -f /exam-code/docker/docker-compose.yaml up -d'
                 sh 'docker ps'
                 sleep time: 30, unit: 'SECONDS'  // Wait for services to start
