@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: fe
-          image: yanivomc/fe-exam:latest  # This should match the latest Jenkins build
+          image: kobi070/fe-exam:latest  # This should match the latest Jenkins build
           ports:
             - containerPort: 5002
