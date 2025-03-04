@@ -23,8 +23,6 @@ pipeline {
             steps {
                 sh 'ls -l'
                 sh 'pip install flake8 bandit'
-                // sh 'flake8 .'
-                // sh 'bandit -r .'
             }
         }
 
@@ -51,7 +49,7 @@ pipeline {
         
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG ."
+                sh "docker build -f exam-code/docker/fe/Dockerfile -t $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG ."
                 sh "docker tag $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG $DOCKER_REGISTRY/$REPO_NAME:latest"
             }
         }
