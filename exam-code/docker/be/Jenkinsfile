@@ -70,11 +70,11 @@ pipeline {
                     sh 'curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose'
                     sh 'chmod +x /usr/local/bin/docker-compose'
                     sh 'docker-compose --version'
+                    sh 'cat docker-compose.yaml'
                     sh 'docker-compose -f docker-compose.yaml up -d'
-                    sleep time: 30, unit: 'SECONDS'  // Wait for services to start
-                    sh 'docker ps -a && echo "Port 5003 is mapped and the container is running." ' // Adjust port for backend if needed
+                    sleep time: 10, unit: 'SECONDS'  // Wait for services to start
+                    sh 'docker ps -a  && echo "Port 5002 is mapped and the container is running." ' // Adjust port for backend if needed
                     sh 'docker-compose -f docker-compose.yaml down'
-                    sh 'docker ps'
                 }
             }
         }
