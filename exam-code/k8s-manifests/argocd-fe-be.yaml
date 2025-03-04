@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/your-org/your-k8s-manifests.git'  # Replace with actual repo
+    repoURL: 'https://github.com/kobi070/devopshift-welcome.git'  # Replace with actual repo
     targetRevision: HEAD
     path: k8s-manifests  # Path to your YAML files
   destination:
