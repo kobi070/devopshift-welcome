@@ -1,7 +1,3 @@
-S# Crypto Application
-
-A containerized three-tier application with a frontend, backend service, and MySQL database designed for cryptocurrency data management.
-
 ## Project Overview
 
 This project consists of three main components:
