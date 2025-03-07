@@ -1,9 +1,45 @@
+version: '3'
 services:
   web:
-
+    build:
+      context: ./fe
+      dockerfile: Dockerfile
+    depends_on:
+      - backend-service
+    ports:
+      - "5002:5002"
+    networks:
+      - app-network
 
   backend-service:
-
+    build:
+      context: ./be
+      dockerfile: Dockerfile
+    ports:
+      - "5003:5001"
+    networks:
+      - app-network
+    environment:
+      - MYSQL_HOST=mysqldb
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=123456
+    depends_on:
+      - mysqldb
 
   mysqldb:
-      
+      image: mysql:5.7
+      environment:
+        MYSQL_ROOT_PASSWORD: 123456
+        # create database name crypto_db
+        MYSQL_DATABASE: crypto_db      
+      networks:
+        - app-network
+      healthcheck:
+        test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "--password=123456"]
+        interval: 30s
+        timeout: 60s
+        retries: 10
+        
+networks:
+  app-network:
+    driver: bridge
