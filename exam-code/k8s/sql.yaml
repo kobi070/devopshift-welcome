@@ -23,6 +23,7 @@ spec:
           value: "123456"
         - name: MYSQL_DATABASE
           value: "crypto_db"
+        
 
 ---
 apiVersion: v1
