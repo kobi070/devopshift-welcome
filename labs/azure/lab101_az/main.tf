@@ -7,11 +7,14 @@ provider "azurerm" {
 variable "name" {
   default = "kobi"
 }
+variable "location" {
+  default = "East US"
+}
 
 # Create a resource group
 resource "azurerm_resource_group" "rg" {
   name     = "${var.name}-terraform-rg"
-  location = "East US" # Change to your preferred region
+  location = var.location
 }
 
 # Create a virtual network
@@ -36,7 +39,7 @@ resource "azurerm_public_ip" "public_ip" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Dynamic"
-  sku                 = "Basic"  # Explicitly use Basic SKU
+  sku                 = "Basic"
 }
 
 # Create a network security group and rule
@@ -80,7 +83,7 @@ resource "azurerm_network_interface_security_group_association" "nsg_assoc" {
 
 # Define your SSH public key
 variable "ssh_public_key" {
-  default = "~/.ssh/id_rsa.pub" # Path to your public key
+  default = "~/.ssh/id_rsa.pub"
 }
 
 # Create a small Linux VM
@@ -115,5 +118,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
 output "ip_address" {
   value = azurerm_public_ip.public_ip.ip_address
-  
+}
+output "azurerm_username" {
+  value = azurerm_linux_virtual_machine.vm.admin_username
 }
